@@ -4,11 +4,19 @@ Working draft for discussion. These principles are intended for SiMa engineers u
 
 The stated principles below capture the requirements expressed so far. Proposed additions and unresolved questions are kept separate so that they do not silently become rules.
 
+## Scope and repository selection
+
+These principles define the workflow for new projects started under this approach. They continue to govern those projects as development proceeds. They are not applied retroactively to pre-existing projects.
+
+When working in an existing project managed by others, use its repository and follow the owners' established rules and procedures. The new-project rules below do not replace that project's branching, documentation, review, or release workflow.
+
+Use the repository that already exists for the work. Related experiments, exploratory scripts, and one-off tests stay in that project's repository, subject to its workflow. Create a new project repository only when no repository exists for the work.
+
 ## Stated principles
 
 ### Remote Git backup is the default
 
-All development work must be backed by a Git repository hosted on a remote server. This applies both to creating a new project without an existing repository and to continuing work in an existing repository.
+All development work in projects governed by these principles must be backed by a Git repository hosted on a remote server. This applies to initial setup and subsequent development, including related experiments and exploratory work.
 
 Agents must commit and push their work after meaningful steps, including while implementation is still in progress. Remote backup must not wait until the task is complete or ready for review.
 
@@ -66,7 +74,7 @@ Code and the documentation recording its decisions may arrive on `develop` toget
 
 ### Documentation is essential
 
-Every project must have an exhaustive description of its purpose and exactly one source of truth document.
+Every project governed by these principles must have an exhaustive description of its purpose and exactly one source of truth document.
 
 The source of truth must have a table of contents and stable sections covering:
 
@@ -215,11 +223,11 @@ An update or a changed version of the software basis is an exception: the previo
 
 The location and discovery of these records, the evidence required to establish failure, and how past approaches are recognized still need to be agreed.
 
-## Development scenario
+## Development scenario for new projects
 
-The intended sequence is:
+The intended sequence for a project started under these principles is:
 
-1. Establish a remotely hosted Git repository, or identify the existing repository and its remote.
+1. Establish remote backing for the project's Git repository, reusing the repository if one already exists. Create a new repository only when none exists for the work.
 2. During initial setup, establish the project branches.
 3. Define the project scope and create the source of truth on `develop`.
 4. Agree on the core features, roadmap, implementation decisions, development plan, and input/output contracts.
@@ -302,7 +310,3 @@ Should the explanation also cover code that has been deleted, including why it w
 ### What counts as a repeated failed approach
 
 How should agents recognize a previously failed approach and note a software change that permits a retry, without requiring exact version numbers or checksums?
-
-### What is the boundary of a development project
-
-Do temporary experiments, exploratory notebooks, one-off scripts, and hardware investigations each need a separate remote repository, or may they live in an existing development repository?
