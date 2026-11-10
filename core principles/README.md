@@ -30,6 +30,12 @@ Roadmap changes and planning may be performed directly on `develop`, including a
 
 Every feature addition or extension requires a new branch with a descriptive name. `develop` must represent a working state, rather than merely the most recent changes.
 
+### The user explicitly initiates releases
+
+`develop` is published to `main` only for a release that the user explicitly requests or manually triggers.
+
+Approval to merge a feature or bugfix into `develop` does not authorize a release. Completing such a merge must not automatically publish the project to `main`.
+
 ### Merge each feature as a whole
 
 A feature's large subtasks and finer tasks are completed and integrated on its feature branch. The complete agreed feature must be ready before it is presented for a consolidated merge review and user approval.
@@ -221,9 +227,9 @@ The intended sequence is:
 10. Escalate problems that invalidate the plan to the user for orchestration and replanning.
 11. Once all agreed subtasks are complete and integrated on the feature branch, verify the affected areas against the agreed acceptance criteria and obtain an extensive Ponytail code review of the complete feature. Fix review problems within the approved plan before presenting the result to the user, keeping verification and review applicable to the final version. Explain every changed or added line of code compared with `develop`, carry out any revisions requested by the user, and obtain explicit user approval before squash merging the complete feature into `develop` in one merge.
 12. Ensure all decisions made during the branch's work, including implementation and intended interaction behavior, are documented in the authoritative source of truth on `develop`. Code and documentation may arrive together in the same squash merge. After the successful squash merge and once this record is in place, delete the merged working branch.
-13. Preserve a working `develop` branch and use `main` exclusively for publication.
+13. Preserve a working `develop` branch. Publish it to `main` only for a release explicitly requested or manually triggered by the user.
 
-The handling of exploratory outcomes without implementation improvements, explanations of deleted code, documentation filenames and storage locations, and release process are not yet fully defined.
+The handling of exploratory outcomes without implementation improvements, explanations of deleted code, documentation filenames and storage locations, and detailed release procedure are not yet fully defined.
 
 ## Proposed additions for discussion
 
@@ -256,6 +262,10 @@ A large subtask could provide its new agent instance with:
 These are proposed requirements for task context, not a prescribed skill or file structure.
 
 ## Open questions
+
+### How are releases identified and prepared
+
+Should releases have version numbers and Git tags? What documentation and deliverables should accompany a manually initiated release, and how should the chosen `develop` state be published to `main`?
 
 ### How are verification requirements selected
 
