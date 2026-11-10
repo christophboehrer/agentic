@@ -40,9 +40,9 @@ The source of truth must contain:
 - Implementation decisions.
 - A changelog.
 
-The source of truth must always be on `develop`. There must not be different versions of this document, including different versions on different branches.
+The document on `develop` is the sole authoritative current source of truth. Agents must consult that version regardless of their working branch.
 
-This is the intended requirement. Its precise handling in Git remains unresolved; it must not be silently weakened to permit independent branch copies.
+Git may retain historical revisions, and other branches may contain inherited snapshots. These snapshots are not authoritative and must never be maintained as independent versions. Changes to the source of truth must be coordinated on `develop`.
 
 Open tasks and work in progress must be tracked through GitHub Issues or equivalent features of the selected hosting provider. The source of truth must remain consistent with the work tracked there.
 
@@ -151,10 +151,6 @@ A large subtask could provide its new agent instance with:
 These are proposed requirements for task context, not a prescribed skill or file structure.
 
 ## Open questions
-
-### How should the single source of truth work across branches
-
-Git preserves earlier revisions, and a branch created from `develop` normally inherits the files committed there. Should the requirement prohibit only competing current documents, with `develop` always authoritative, or should the source of truth be absent from feature and publication branches entirely? How should agents obtain its current content while working on another branch?
 
 ### Can planning and documentation be changed directly on develop
 
