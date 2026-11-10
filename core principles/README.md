@@ -24,6 +24,8 @@ The user must explicitly initiate any decision to work without remote backup. Th
 
 If the user explicitly requests an exception, the agent must follow up to confirm that the user is really sure they want to proceed without backing up their work. An initial opt-out request alone is insufficient.
 
+Dedicated backup-outage handling is outside the current scope.
+
 ### Branches have distinct purposes
 
 | Branch | Purpose |
@@ -71,6 +73,12 @@ After a successful squash merge into `develop`, the merged feature or bugfix bra
 Before the branch is deleted, all decisions made during its work must be documented in the authoritative source of truth on `develop`. This includes how the feature is implemented and how its interactions are intended to work. The decision record must remain available after the working branch is gone.
 
 Code and the documentation recording its decisions may arrive on `develop` together in the same squash merge.
+
+### Preserve findings before deleting abandoned branches
+
+When the user abandons a feature, exploration, or optimization without merging its implementation, its findings and relevant decisions must be preserved before the working branch is deleted.
+
+Project-specific findings belong in the authoritative project document and linked evidence on `develop`. Reusable lessons belong in the engineer's personal knowledge collection. Once those records are preserved, delete the abandoned branch.
 
 ### Documentation is essential
 
@@ -129,9 +137,11 @@ Each large subtask must be assigned to a new agent instance. The concrete goals,
 
 Independent large subtasks may be executed in parallel by separate agent instances.
 
+Parallel work must be independent: ordinary changes to `develop` must not affect another active branch or agent. The user handles the integration of relevant `develop` changes after a bugfix.
+
 When a bug already present in `develop` blocks tasks, those tasks must be marked as blocked and their agents must pause the blocked work. The user orchestrates affected agents and designates the worker responsible for the fix. Exactly one agent at a time may work on a given fix, even when multiple agents discover the same bug.
 
-Bug handling uses existing GitHub issues and human orchestration. An automated coordinator is not part of this workflow. How other affected running agents are informed and paused remains an open question.
+Bug handling uses existing GitHub issues and human orchestration. The user informs the other affected agents about blockers and directs them to pause. An automated coordinator is not part of this workflow.
 
 ### Exploration and best effort optimization are valid tasks
 
@@ -202,8 +212,8 @@ If an agent discovers a bug already present in `develop`, it must:
 5. Let the user orchestrate the fixing effort. If multiple agents discover the same bug at the same time, the user resolves the overlap and delegates a single fixing worker.
 6. Have the fixing worker present the required explanation of the fix and obtain explicit user approval for the merge.
 7. Squash merge the approved fix into `develop`.
-8. Merge the updated `develop` into the paused feature branch.
-9. Continue the original subtask.
+8. Have the user merge the relevant updated `develop` state into the paused feature branch.
+9. Continue the original subtask after that integration.
 
 The bugfix must meet the verification requirements for its affected areas and receive the required Ponytail review before the agent requests approval to merge.
 
@@ -217,7 +227,9 @@ An example is discovering that the result of a previously finished task can neve
 
 ### Successful and unsuccessful attempts must be documented
 
-Every attempt must be documented with enough detail to explain what was tried and what happened.
+Every meaningful attempt at an approach must be documented with enough detail to explain what was tried and what happened.
+
+Failed approaches include wrong methods, concepts, and incorrect assumptions about or handling of APIs. Routine implementation mistakes do not count as failed approaches and do not require reusable failure records. Their correction still follows the bug-handling rules above.
 
 When a difficult situation requires previous knowledge or exploration, successful approaches must be preserved so that the engineer and their agents can find and reuse them in future projects. This knowledge must remain discoverable beyond the current agent instance and task.
 
@@ -227,7 +239,7 @@ Unsuccessful attempts must also be documented. Once an approach has been proven 
 
 An update or a changed version of the software basis is an exception: the previously unsuccessful approach may be tried again under the changed software basis. The earlier attempt and its outcome must remain documented.
 
-The location and discovery of these records, the evidence required to establish failure, and how past approaches are recognized still need to be agreed.
+The location and discovery of these records still need to be agreed.
 
 ## Development scenario for new projects
 
@@ -239,13 +251,15 @@ The intended sequence for a project started under these principles is:
 4. Agree on the core features, roadmap, implementation decisions, development plan, and input/output contracts.
 5. Convert the plan into large issues and finer tasks using the hosting provider's features.
 6. Create a descriptively named branch for the complete feature addition or extension. Use a new agent instance for each large subtask and define its concrete goals, acceptance criteria, and verification method when it starts. Goals may cover exploration or best effort optimization. For optimization work, agree with the user on the target, approach, and stopping conditions; the user shapes the methods unless they explicitly delegate those choices.
-7. Follow the plan and document attempts as work proceeds. Agents may merge subtask work into the feature branch without asking for user approval. Preserve successful approaches for reuse in future projects and unsuccessful approaches to prevent repeated failures. For exploration and best effort optimization, report the findings at the agreed stopping point and let the user decide whether to continue, conclude, or move on.
+7. Follow the plan and document meaningful attempts at approaches as work proceeds. Agents may merge subtask work into the feature branch without asking for user approval. Preserve successful approaches for reuse in future projects and unsuccessful approaches to prevent repeated failures. For exploration and best effort optimization, report the findings at the agreed stopping point and let the user decide whether to continue, conclude, or move on.
 8. Fix bugs in work that has not yet reached `develop` in the working branch, without creating separate bug issues or asking for a separate fixing worker.
-9. For bugs already present in `develop`, pause and search the existing issues. Add context to a matching issue, or ask the user to create an issue and delegate a fixing worker when no match exists. The user orchestrates simultaneous discoveries and assigns a single fixing worker. The fix requires verification of the affected areas, Ponytail review, the code explanation, and explicit user approval before squash merging into `develop`. Bring the corrected `develop` into the feature branch before resuming. Other tasks blocked by the same bug must also be marked blocked and their agents paused.
+9. For bugs already present in `develop`, pause and search the existing issues. Add context to a matching issue, or ask the user to create an issue and delegate a fixing worker when no match exists. The user orchestrates simultaneous discoveries, assigns a single fixing worker, and informs other affected agents that they must pause. The fix requires verification of the affected areas, Ponytail review, the code explanation, and explicit user approval before squash merging into `develop`. The user merges the relevant corrected `develop` state into the affected feature branch before the agent resumes. Other tasks blocked by the same bug must also be marked blocked.
 10. Escalate problems that invalidate the plan to the user for orchestration and replanning.
 11. Once all agreed subtasks are complete and integrated on the feature branch, verify the affected areas against the agreed acceptance criteria and obtain an extensive Ponytail code review of the complete feature. Fix review problems within the approved plan before presenting the result to the user, keeping verification and review applicable to the final version. Explain every changed or added line of code compared with `develop`, carry out any revisions requested by the user, and obtain explicit user approval before squash merging the complete feature into `develop` in one merge.
 12. Ensure all decisions made during the branch's work, including implementation and intended interaction behavior, are documented in the authoritative source of truth on `develop`. Code and documentation may arrive together in the same squash merge. After the successful squash merge and once this record is in place, delete the merged working branch.
 13. Preserve a working `develop` branch. Publish it to `main` only for a release explicitly requested or manually triggered by the user, assigning a release version number and Git tag to the released commit on `main`.
+
+If the user abandons the work instead of merging it, preserve the findings and relevant decisions, then delete the abandoned working branch.
 
 Explanations of deleted code, documentation filenames and storage locations, and the detailed release procedure are not yet fully defined.
 
@@ -297,18 +311,6 @@ Where should an engineer's successful and unsuccessful approaches be kept so tha
 
 How should direct planning updates on `develop` be grouped into coherent commits while keeping meaningful progress backed up remotely?
 
-### How are backup failures and exceptions handled
-
-How should agents handle network outages, a missing remote, or failed authentication? Does a confirmed opt-out waive remote hosting only, or also local Git use, and for how long does the exception apply?
-
-### How are other affected agents informed and paused
-
-Under human orchestration, should the user notify and pause other affected agents, or should agents also check the issue tracker at agreed checkpoints? Which tasks should pause when the impact of a bug is not yet known?
-
 ### How should deleted code be explained
 
 Should the explanation also cover code that has been deleted, including why it was removed and how any affected behavior is handled?
-
-### What counts as a repeated failed approach
-
-How should agents recognize a previously failed approach and note a software change that permits a retry, without requiring exact version numbers or checksums?
