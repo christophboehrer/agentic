@@ -38,6 +38,12 @@ Agents must continue to commit and push meaningful steps on their working branch
 
 Successful and unsuccessful attempts must remain documented independently of the condensed commit history. Planning changes made directly on `develop` remain individual commits.
 
+### Preserve decisions before deleting merged branches
+
+After a successful squash merge into `develop`, the merged feature or bugfix branch must be deleted.
+
+Before the branch is deleted, all decisions made during its work must be documented in the authoritative source of truth on `develop`. This includes how the feature is implemented and how its interactions are intended to work. The decision record must remain available after the working branch is gone.
+
 ### Documentation is essential
 
 Every project must have an exhaustive description of its purpose and exactly one source of truth document.
@@ -138,6 +144,8 @@ If an agent discovers a bug already present in `develop`, it must:
 
 The bugfix must meet the verification requirements for its affected areas and receive the required Ponytail review before the agent requests approval to merge.
 
+After the squash merge, the bugfix branch must be deleted once its decisions have been recorded on `develop`.
+
 #### A problem that invalidates the plan
 
 If a major issue arises, the agent must pause and report it to the user. The user then takes over orchestration and replanning.
@@ -173,7 +181,8 @@ The intended sequence is:
 9. For bugs already present in `develop`, pause and search the existing issues. Add context to a matching issue, or ask the user to create an issue and delegate a fixing worker when no match exists. The user orchestrates simultaneous discoveries and assigns a single fixing worker. The fix requires verification of the affected areas, Ponytail review, the code explanation, and explicit user approval before squash merging into `develop`. Bring the corrected `develop` into the feature branch before resuming. Other tasks blocked by the same bug must also be marked blocked and their agents paused.
 10. Escalate problems that invalidate the plan to the user for orchestration and replanning.
 11. Verify the affected areas against the instance's agreed acceptance criteria and obtain an extensive Ponytail code review. Explain every changed or added line of code compared with `develop`, carry out any revisions requested by the user, and obtain explicit user approval before squash merging the branch into `develop`.
-12. Preserve a working `develop` branch and use `main` exclusively for publication.
+12. Ensure all decisions made during the branch's work, including implementation and intended interaction behavior, are documented in the authoritative source of truth on `develop`. After the successful squash merge and once this record is in place, delete the merged working branch.
+13. Preserve a working `develop` branch and use `main` exclusively for publication.
 
 The handling of exploratory outcomes without implementation improvements, review findings, explanations of deleted code, source of truth updates, and release process are not yet fully defined.
 
@@ -220,9 +229,9 @@ These are proposed requirements for task context, not a prescribed skill or file
 
 ## Open questions
 
-### How are other documentation updates handled
+### When are decisions and other documentation recorded on develop
 
-Roadmap changes and planning may be performed directly on `develop`. Should other documentation updates, such as changelog entries and descriptions of completed implementation work, also be made directly on `develop`, or should they accompany the relevant feature or bugfix branch?
+Decisions made during feature and bugfix work must be recorded in the source of truth on `develop` before the merged working branch is deleted. Must those updates be committed before the implementation is merged, or may they arrive with the merge? How should changelog entries and descriptions of completed implementation work be updated?
 
 ### How are verification requirements selected
 
@@ -240,9 +249,9 @@ Where should an engineer's successful and unsuccessful approaches be kept so tha
 
 Which information is authoritative in the source of truth, and which information is authoritative in the hosting provider's issues? Where should detailed attempt records live so they can be found without creating competing versions of project state?
 
-### How are planning commits and completed branches managed
+### How are direct planning commits grouped
 
-How should direct planning updates on `develop` be grouped, and how long should the detailed history on completed working branches be retained after a squash merge?
+How should direct planning updates on `develop` be grouped into coherent commits while keeping meaningful progress backed up remotely?
 
 ### How are backup failures and exceptions handled
 
