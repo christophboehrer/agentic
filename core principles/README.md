@@ -10,6 +10,8 @@ The stated principles below capture the requirements expressed so far. Proposed 
 
 All development work must be backed by a Git repository hosted on a remote server. This applies both to creating a new project without an existing repository and to continuing work in an existing repository.
 
+Agents must commit and push their work after meaningful steps, including while implementation is still in progress. Remote backup must not wait until the task is complete or ready for review.
+
 The user must explicitly initiate any decision to work without remote backup. The agent must never ask whether the user wants to opt out or suggest opting out as a routine alternative.
 
 If the user explicitly requests an exception, the agent must follow up to confirm that the user is really sure they want to proceed without backing up their work. An initial opt-out request alone is insufficient.
@@ -230,9 +232,13 @@ Where should an engineer's successful and unsuccessful approaches be kept so tha
 
 Which information is authoritative in the source of truth, and which information is authoritative in the hosting provider's issues? Where should detailed attempt records live so they can be found without creating competing versions of project state?
 
-### When must work be committed and pushed
+### How is develop history kept concise
 
-What events require a remote backup? How should agents handle network outages, a missing remote, or failed authentication? Does a confirmed opt-out waive remote hosting only, or also local Git use, and for how long does the exception apply?
+Which merge strategy should keep `develop` history concise while allowing frequent commits and pushes on working branches? How should direct planning updates on `develop` be grouped, and how long should the detailed history on completed working branches be retained?
+
+### How are backup failures and exceptions handled
+
+How should agents handle network outages, a missing remote, or failed authentication? Does a confirmed opt-out waive remote hosting only, or also local Git use, and for how long does the exception apply?
 
 ### How do large subtasks map to branches and agents
 
