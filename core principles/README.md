@@ -82,7 +82,15 @@ The agent must document which affected areas were tested and the results. The ch
 
 Before any branch may be merged into `develop`, its changes must receive an extensive code review using the Ponytail plugin. This requirement applies to feature branches and bugfix branches.
 
-How review findings are resolved and who authorizes the merge remain open questions.
+How review findings are resolved remains an open question. The user must approve the merge as described below.
+
+### The user approves merges after a full code explanation
+
+Every merge into `develop` requires explicit user approval. Passing the affected-area tests and completing the Ponytail review do not by themselves authorize a merge.
+
+Before requesting approval, the agent must explain the implementation compared with `develop`. The explanation must account for every line of code that has been changed or added. For every such line, it must describe in simple terms what the code does, its purpose, and a good reason why it should exist.
+
+The user has full authority to decide whether the implementation meets their standards. They may request changes or a complete overhaul. The agent must carry out the requested revisions and present the revised implementation for approval before merging. The revised implementation remains subject to the same verification and review requirements.
 
 ### Bug handling depends on where the bug originated
 
@@ -99,11 +107,12 @@ If an agent discovers a bug in a previously finished task, it must:
 1. Pause execution of the current subtask.
 2. Raise a new bugfix issue.
 3. Spawn a subagent to fix that bug first.
-4. Merge the completed fix into `develop`.
-5. Merge the updated `develop` into the paused feature branch.
-6. Continue the original subtask.
+4. Present the required explanation of the fix and obtain explicit user approval for the merge.
+5. Merge the approved fix into `develop`.
+6. Merge the updated `develop` into the paused feature branch.
+7. Continue the original subtask.
 
-The bugfix must meet the verification requirements for its affected areas and receive the required Ponytail review before merging. The authority to approve merges still needs to be defined.
+The bugfix must meet the verification requirements for its affected areas and receive the required Ponytail review before the agent requests approval to merge.
 
 #### A problem that invalidates the plan
 
@@ -135,12 +144,12 @@ The intended sequence is:
 6. Start a new agent instance for a large subtask, define its concrete goals, acceptance criteria, and verification method, and create a descriptively named feature branch for the feature addition or extension. Goals may cover exploration or best effort optimization. For optimization work, agree with the user on the target, approach, and stopping conditions; the user shapes the methods unless they explicitly delegate those choices.
 7. Follow the plan and document attempts as work proceeds. Preserve successful approaches for reuse in future projects and unsuccessful approaches to prevent repeated failures.
 8. Fix bugs introduced within the current subtask in place, without creating separate issues.
-9. For bugs in finished tasks, pause, raise a bugfix issue, have a subagent fix it, verify the affected areas, obtain the required Ponytail review, merge into `develop`, bring `develop` into the feature branch, and resume.
+9. For bugs in finished tasks, pause, raise a bugfix issue, have a subagent fix it, verify the affected areas, obtain the required Ponytail review, explain every changed or added line to the user, obtain explicit user approval, merge into `develop`, bring `develop` into the feature branch, and resume.
 10. Escalate problems that invalidate the plan to the user for orchestration and replanning.
-11. Verify the affected areas against the instance's agreed acceptance criteria and obtain an extensive Ponytail code review before merging the branch into `develop`.
+11. Verify the affected areas against the instance's agreed acceptance criteria and obtain an extensive Ponytail code review. Explain every changed or added line of code compared with `develop`, carry out any revisions requested by the user, and obtain explicit user approval before merging the branch into `develop`.
 12. Preserve a working `develop` branch and use `main` exclusively for publication.
 
-The handling of exploratory outcomes without implementation improvements, review findings, merge approval, source of truth updates, and release process are not yet fully defined.
+The handling of exploratory outcomes without implementation improvements, review findings, presentation of the code explanation, source of truth updates, and release process are not yet fully defined.
 
 ## Proposed additions for discussion
 
@@ -213,9 +222,13 @@ What events require a remote backup? How should agents handle network outages, a
 
 Is each large subtask exactly one feature branch, or can a feature contain several large subtasks? May several agents work in parallel? What marks a task as finished for the bug-handling rule?
 
-### Who approves fixes and merges
+### How are review findings handled
 
-After the required Ponytail review, which findings must be resolved before a merge, and may an agent merge a verified feature or bugfix into `develop` autonomously, or is human approval required? What happens when the agent discovers that a bugfix changes a contract, conflicts with other work, or requires replanning?
+Which Ponytail findings must be resolved before requesting user approval, and how should unresolved findings be presented to the user? What happens when the agent discovers that a bugfix changes a contract, conflicts with other work, or requires replanning?
+
+### How is the explanation of every changed or added line presented
+
+Must each changed or added line have its own separate explanation, or may related lines be explained together as a logical unit provided every line's purpose and reason for existing are covered? How should deleted code be explained?
 
 ### What counts as a repeated failed approach
 
