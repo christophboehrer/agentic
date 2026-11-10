@@ -44,6 +44,8 @@ After a successful squash merge into `develop`, the merged feature or bugfix bra
 
 Before the branch is deleted, all decisions made during its work must be documented in the authoritative source of truth on `develop`. This includes how the feature is implemented and how its interactions are intended to work. The decision record must remain available after the working branch is gone.
 
+Code and the documentation recording its decisions may arrive on `develop` together in the same squash merge.
+
 ### Documentation is essential
 
 Every project must have an exhaustive description of its purpose and exactly one source of truth document.
@@ -59,6 +61,8 @@ The source of truth must contain:
 The document on `develop` is the sole authoritative current source of truth. Agents must consult that version regardless of their working branch.
 
 Git may retain historical revisions, and other branches may contain inherited snapshots. These snapshots are not authoritative and must never be maintained as independent versions. Changes to the source of truth must be coordinated on `develop`.
+
+A feature or bugfix branch may prepare proposed documentation changes alongside its code. Those changes become authoritative when merged into `develop`; until then, the current document on `develop` remains authoritative.
 
 Open tasks and work in progress must be tracked through GitHub Issues or equivalent features of the selected hosting provider. The source of truth must remain consistent with the work tracked there.
 
@@ -181,7 +185,7 @@ The intended sequence is:
 9. For bugs already present in `develop`, pause and search the existing issues. Add context to a matching issue, or ask the user to create an issue and delegate a fixing worker when no match exists. The user orchestrates simultaneous discoveries and assigns a single fixing worker. The fix requires verification of the affected areas, Ponytail review, the code explanation, and explicit user approval before squash merging into `develop`. Bring the corrected `develop` into the feature branch before resuming. Other tasks blocked by the same bug must also be marked blocked and their agents paused.
 10. Escalate problems that invalidate the plan to the user for orchestration and replanning.
 11. Verify the affected areas against the instance's agreed acceptance criteria and obtain an extensive Ponytail code review. Explain every changed or added line of code compared with `develop`, carry out any revisions requested by the user, and obtain explicit user approval before squash merging the branch into `develop`.
-12. Ensure all decisions made during the branch's work, including implementation and intended interaction behavior, are documented in the authoritative source of truth on `develop`. After the successful squash merge and once this record is in place, delete the merged working branch.
+12. Ensure all decisions made during the branch's work, including implementation and intended interaction behavior, are documented in the authoritative source of truth on `develop`. Code and documentation may arrive together in the same squash merge. After the successful squash merge and once this record is in place, delete the merged working branch.
 13. Preserve a working `develop` branch and use `main` exclusively for publication.
 
 The handling of exploratory outcomes without implementation improvements, review findings, explanations of deleted code, source of truth updates, and release process are not yet fully defined.
@@ -229,9 +233,9 @@ These are proposed requirements for task context, not a prescribed skill or file
 
 ## Open questions
 
-### When are decisions and other documentation recorded on develop
+### How is the authoritative project document structured
 
-Decisions made during feature and bugfix work must be recorded in the source of truth on `develop` before the merged working branch is deleted. Must those updates be committed before the implementation is merged, or may they arrive with the merge? How should changelog entries and descriptions of completed implementation work be updated?
+How should the single source of truth remain exhaustive and easy to navigate as the project grows? Which supporting records may be kept separately, and how should the document link to them without duplicating current project requirements, behavior, or decisions?
 
 ### How are verification requirements selected
 
