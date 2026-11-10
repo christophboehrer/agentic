@@ -90,6 +90,8 @@ Every merge into `develop` requires explicit user approval. Passing the affected
 
 Before requesting approval, the agent must explain the implementation compared with `develop`. The explanation must account for every line of code that has been changed or added. For every such line, it must describe in simple terms what the code does, its purpose, and a good reason why it should exist.
 
+Related lines may be explained together. An explanation may cover a whole block, method, or class, provided every changed or added line's purpose and reason for existing are covered. A separate explanation for each individual line is not required.
+
 The user has full authority to decide whether the implementation meets their standards. They may request changes or a complete overhaul. The agent must carry out the requested revisions and present the revised implementation for approval before merging. The revised implementation remains subject to the same verification and review requirements.
 
 ### Bug handling depends on where the bug originated
@@ -149,7 +151,7 @@ The intended sequence is:
 11. Verify the affected areas against the instance's agreed acceptance criteria and obtain an extensive Ponytail code review. Explain every changed or added line of code compared with `develop`, carry out any revisions requested by the user, and obtain explicit user approval before merging the branch into `develop`.
 12. Preserve a working `develop` branch and use `main` exclusively for publication.
 
-The handling of exploratory outcomes without implementation improvements, review findings, presentation of the code explanation, source of truth updates, and release process are not yet fully defined.
+The handling of exploratory outcomes without implementation improvements, review findings, explanations of deleted code, source of truth updates, and release process are not yet fully defined.
 
 ## Proposed additions for discussion
 
@@ -226,9 +228,9 @@ Is each large subtask exactly one feature branch, or can a feature contain sever
 
 Which Ponytail findings must be resolved before requesting user approval, and how should unresolved findings be presented to the user? What happens when the agent discovers that a bugfix changes a contract, conflicts with other work, or requires replanning?
 
-### How is the explanation of every changed or added line presented
+### How should deleted code be explained
 
-Must each changed or added line have its own separate explanation, or may related lines be explained together as a logical unit provided every line's purpose and reason for existing are covered? How should deleted code be explained?
+Should the explanation also cover code that has been deleted, including why it was removed and how any affected behavior is handled?
 
 ### What counts as a repeated failed approach
 
