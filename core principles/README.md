@@ -30,6 +30,14 @@ Roadmap changes and planning may be performed directly on `develop`, including a
 
 Every feature addition or extension requires a new branch with a descriptive name. `develop` must represent a working state, rather than merely the most recent changes.
 
+### Merge each feature as a whole
+
+A feature's large subtasks and finer tasks are completed and integrated on its feature branch. The complete agreed feature must be ready before it is presented for a consolidated merge review and user approval.
+
+The feature enters `develop` through one squash merge after all its agreed subtasks are complete. Individual subtasks must not be merged into `develop` separately. This reduces the number of merge approval interactions with the user.
+
+Each large subtask still uses a new agent instance, and independent subtasks may run in parallel. Frequent commits and pushes continue throughout the work.
+
 ### Squash merges keep develop history concise
 
 Approved feature and bugfix branches must be squash merged into `develop`. Each approved branch contributes one commit to `develop`, combining its implementation commits into a single completed change.
@@ -200,12 +208,12 @@ The intended sequence is:
 3. Define the project scope and create the source of truth on `develop`.
 4. Agree on the core features, roadmap, implementation decisions, development plan, and input/output contracts.
 5. Convert the plan into large issues and finer tasks using the hosting provider's features.
-6. Start a new agent instance for a large subtask, define its concrete goals, acceptance criteria, and verification method, and create a descriptively named feature branch for the feature addition or extension. Goals may cover exploration or best effort optimization. For optimization work, agree with the user on the target, approach, and stopping conditions; the user shapes the methods unless they explicitly delegate those choices.
+6. Create a descriptively named branch for the complete feature addition or extension. Use a new agent instance for each large subtask and define its concrete goals, acceptance criteria, and verification method when it starts. Goals may cover exploration or best effort optimization. For optimization work, agree with the user on the target, approach, and stopping conditions; the user shapes the methods unless they explicitly delegate those choices.
 7. Follow the plan and document attempts as work proceeds. Preserve successful approaches for reuse in future projects and unsuccessful approaches to prevent repeated failures.
 8. Fix bugs in work that has not yet reached `develop` in the working branch, without creating separate bug issues or asking for a separate fixing worker.
 9. For bugs already present in `develop`, pause and search the existing issues. Add context to a matching issue, or ask the user to create an issue and delegate a fixing worker when no match exists. The user orchestrates simultaneous discoveries and assigns a single fixing worker. The fix requires verification of the affected areas, Ponytail review, the code explanation, and explicit user approval before squash merging into `develop`. Bring the corrected `develop` into the feature branch before resuming. Other tasks blocked by the same bug must also be marked blocked and their agents paused.
 10. Escalate problems that invalidate the plan to the user for orchestration and replanning.
-11. Verify the affected areas against the instance's agreed acceptance criteria and obtain an extensive Ponytail code review. Explain every changed or added line of code compared with `develop`, carry out any revisions requested by the user, and obtain explicit user approval before squash merging the branch into `develop`.
+11. Once all agreed subtasks are complete and integrated on the feature branch, verify the affected areas against the agreed acceptance criteria and obtain an extensive Ponytail code review of the complete feature. Explain every changed or added line of code compared with `develop`, carry out any revisions requested by the user, and obtain explicit user approval before squash merging the complete feature into `develop` in one merge.
 12. Ensure all decisions made during the branch's work, including implementation and intended interaction behavior, are documented in the authoritative source of truth on `develop`. Code and documentation may arrive together in the same squash merge. After the successful squash merge and once this record is in place, delete the merged working branch.
 13. Preserve a working `develop` branch and use `main` exclusively for publication.
 
@@ -263,9 +271,9 @@ How should direct planning updates on `develop` be grouped into coherent commits
 
 How should agents handle network outages, a missing remote, or failed authentication? Does a confirmed opt-out waive remote hosting only, or also local Git use, and for how long does the exception apply?
 
-### How do large subtasks map to branches and agents
+### How is parallel subtask work integrated into the feature branch
 
-Is each large subtask exactly one feature branch, or can a feature contain several large subtasks?
+How should agents combine independent subtask contributions on the feature branch while keeping the final merge into `develop` as one user-approved operation? May temporary subtask branches be integrated into the feature branch autonomously?
 
 ### How are other affected agents informed and paused
 
