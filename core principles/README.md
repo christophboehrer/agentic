@@ -75,7 +75,7 @@ The source of truth must have a table of contents and stable sections covering:
 | Purpose and scope | Why the project exists, its goals, boundaries, and exclusions. |
 | Features and interactions | Required behavior, clearly identifying what is implemented and what is planned. |
 | Architecture and contracts | Component responsibilities, inputs, outputs, and how components interact. |
-| Working environment | Relevant hardware, software versions, dependencies, and known limitations. |
+| Working environment | Relevant hardware, software, dependencies, and known limitations. Recording exact versions is optional. |
 | Roadmap | The implementation direction and development plan, with links to the issue hierarchy. |
 | Implementation decisions | What was decided, why, and which components or interactions are affected. |
 | Verification | How behavior is verified, with links to recorded results. |
@@ -99,7 +99,9 @@ A short project entry point links to the authoritative document on `develop`. Co
 
 ### Supporting records preserve evidence and reusable knowledge
 
-Detailed experiment records, test results, reproduction details, and attempt histories may be kept separately and linked from the authoritative document. Each attempt record must identify the source revision, software versions, approach, result, and conclusion.
+Detailed experiment records, test results, reproduction details, and attempt histories may be kept separately and linked from the authoritative document. Each attempt record must describe the approach, result, and conclusion.
+
+Recording software versions, source revisions, artifact checksums, and similar technical identifiers is optional. This does not change the requirement for release version numbers and Git tags when publishing a release on `main`.
 
 The project document defines the current project and contains the resulting decisions. Supporting records explain what was observed and why those decisions were made; they do not establish competing current requirements or behavior.
 
@@ -211,7 +213,7 @@ Unsuccessful attempts must also be documented. Once an approach has been proven 
 
 An update or a changed version of the software basis is an exception: the previously unsuccessful approach may be tried again under the changed software basis. The earlier attempt and its outcome must remain documented.
 
-The location and discovery of these records, the evidence required to establish failure, and how approaches and software versions are identified still need to be agreed.
+The location and discovery of these records, the evidence required to establish failure, and how past approaches are recognized still need to be agreed.
 
 ## Development scenario
 
@@ -241,11 +243,11 @@ Decision records could also include rejected alternatives, the reasons for rejec
 
 ### Information needed to understand an attempt
 
-Beyond the required source revision, software versions, approach, result, and conclusion, an attempt record could also include:
+Beyond the required approach, result, and conclusion, an attempt record could also include:
 
 - The task, intended outcome, and hypothesis being tested.
 - The reason for choosing the approach.
-- Further environment details, tool versions, configuration, and inputs.
+- Environment details, software and tool versions, source revisions, artifact checksums, configuration, and inputs.
 - The actions or commands needed to reproduce the attempt.
 - Links to logs, tests, or other evidence supporting the observed result.
 - An explicit distinction between proven failure and inconclusive results.
@@ -258,7 +260,7 @@ A large subtask could provide its new agent instance with:
 - Its purpose, scope, acceptance criteria, and input/output contracts.
 - Links to the source of truth and the relevant issue hierarchy.
 - Its dependencies and the work already completed.
-- Known successful and unsuccessful approaches relevant to the subtask, including their software versions and applicability to the current work.
+- Known successful and unsuccessful approaches relevant to the subtask, including any available context about their applicability to the current work.
 - The current repository and branch state.
 
 These are proposed requirements for task context, not a prescribed skill or file structure.
@@ -299,7 +301,7 @@ Should the explanation also cover code that has been deleted, including why it w
 
 ### What counts as a repeated failed approach
 
-How should agents identify matching approaches and the software basis on which they were tried? How should an update or software version change that permits a retry be recorded so the retry can be distinguished from repeating an unchanged failed approach?
+How should agents recognize a previously failed approach and note a software change that permits a retry, without requiring exact version numbers or checksums?
 
 ### What is the boundary of a development project
 
