@@ -56,6 +56,14 @@ The purpose and input/output contracts of the planned work must be well defined 
 
 Each large subtask must be assigned to a new agent instance. The concrete goals, acceptance criteria, and relevant verification method for that instance must be defined when it starts. The instance must follow the agreed plan.
 
+### Parallel execution requires independent work
+
+Independent large subtasks may be executed in parallel by separate agent instances.
+
+When a bug blocks tasks, the setup must mark those tasks as blocked, notify their agents, and stop execution of the blocked work. Exactly one agent at a time may work on a given fix, even when multiple agents discover the same bug.
+
+The mechanism for coordinating reports, claiming a fix, and pausing affected agents still needs to be agreed.
+
 ### Exploration and best effort optimization are valid tasks
 
 A task may explore options or attempt an optimization without a predefined technical outcome or numerical improvement target.
@@ -107,8 +115,8 @@ The correction remains part of the current subtask. The general requirement to d
 If an agent discovers a bug in a previously finished task, it must:
 
 1. Pause execution of the current subtask.
-2. Raise a new bugfix issue.
-3. Spawn a subagent to fix that bug first.
+2. Use the existing bugfix issue for the same bug, or create one if it is not already tracked.
+3. Have a single agent fix the bug first. Reuse an existing fix effort if one is already active; otherwise spawn a subagent without starting competing fixes.
 4. Present the required explanation of the fix and obtain explicit user approval for the merge.
 5. Merge the approved fix into `develop`.
 6. Merge the updated `develop` into the paused feature branch.
@@ -148,7 +156,7 @@ The intended sequence is:
 6. Start a new agent instance for a large subtask, define its concrete goals, acceptance criteria, and verification method, and create a descriptively named feature branch for the feature addition or extension. Goals may cover exploration or best effort optimization. For optimization work, agree with the user on the target, approach, and stopping conditions; the user shapes the methods unless they explicitly delegate those choices.
 7. Follow the plan and document attempts as work proceeds. Preserve successful approaches for reuse in future projects and unsuccessful approaches to prevent repeated failures.
 8. Fix bugs introduced within the current subtask in place, without creating separate issues.
-9. For bugs in finished tasks, pause, raise a bugfix issue, have a subagent fix it, verify the affected areas, obtain the required Ponytail review, explain every changed or added line to the user, obtain explicit user approval, merge into `develop`, bring `develop` into the feature branch, and resume.
+9. For bugs in finished tasks, pause, use the existing bugfix issue or create one, ensure only one agent works on the fix, verify the affected areas, obtain the required Ponytail review, explain every changed or added line to the user, obtain explicit user approval, merge into `develop`, bring `develop` into the feature branch, and resume. Other tasks blocked by the same bug must also be marked blocked and their agents notified and stopped.
 10. Escalate problems that invalidate the plan to the user for orchestration and replanning.
 11. Verify the affected areas against the instance's agreed acceptance criteria and obtain an extensive Ponytail code review. Explain every changed or added line of code compared with `develop`, carry out any revisions requested by the user, and obtain explicit user approval before merging the branch into `develop`.
 12. Preserve a working `develop` branch and use `main` exclusively for publication.
@@ -224,7 +232,11 @@ What events require a remote backup? How should agents handle network outages, a
 
 ### How do large subtasks map to branches and agents
 
-Is each large subtask exactly one feature branch, or can a feature contain several large subtasks? May several agents work in parallel? What marks a task as finished for the bug-handling rule?
+Is each large subtask exactly one feature branch, or can a feature contain several large subtasks? What marks a task as finished for the bug-handling rule?
+
+### How are shared bugs coordinated
+
+How should simultaneous reports of the same bug be matched and assigned to exactly one fixing agent? How should running agents be notified and paused, and how should an interrupted fix be reassigned without starting competing work? Should coordination cover one PC or agents running across multiple machines? Which tasks should pause when the impact of a bug is not yet known?
 
 ### How are review findings handled
 
