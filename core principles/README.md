@@ -60,7 +60,7 @@ Each large subtask must be assigned to a new agent instance. The concrete goals,
 
 Independent large subtasks may be executed in parallel by separate agent instances.
 
-When a bug blocks tasks, those tasks must be marked as blocked and their agents must pause the blocked work. The user orchestrates affected agents and designates the worker responsible for the fix. Exactly one agent at a time may work on a given fix, even when multiple agents discover the same bug.
+When a bug already present in `develop` blocks tasks, those tasks must be marked as blocked and their agents must pause the blocked work. The user orchestrates affected agents and designates the worker responsible for the fix. Exactly one agent at a time may work on a given fix, even when multiple agents discover the same bug.
 
 Bug handling uses existing GitHub issues and human orchestration. An automated coordinator is not part of this workflow. How other affected running agents are informed and paused remains an open question.
 
@@ -102,17 +102,19 @@ Related lines may be explained together. An explanation may cover a whole block,
 
 The user has full authority to decide whether the implementation meets their standards. They may request changes or a complete overhaul. The agent must carry out the requested revisions and present the revised implementation for approval before merging. The revised implementation remains subject to the same verification and review requirements.
 
-### Bug handling depends on where the bug originated
+### Bug handling depends on whether the bug is in develop
 
-#### A bug introduced earlier in the same subtask
+Whether the bug is present in `develop` determines the workflow, regardless of which branch the agent is using when it discovers the bug.
 
-If an agent discovers a bug that it introduced in an earlier step of its current subtask, it must fix the bug in place. It must not create a new issue for that bug.
+#### A bug that has not reached develop
 
-The correction remains part of the current subtask. The general requirement to document attempts still applies.
+If a bug exists only in work that has not been merged into `develop`, the agent must fix it in its working branch without creating a separate bug issue or asking the user to delegate a separate fixing worker.
 
-#### A bug in a previously finished task
+The correction remains part of the branch's implementation work. The general requirement to document attempts still applies.
 
-If an agent discovers a bug in a previously finished task, it must:
+#### A bug already in develop
+
+If an agent discovers a bug already present in `develop`, it must:
 
 1. Pause execution of the current subtask.
 2. Search the existing GitHub issues for the same bug, or use the equivalent issue tracker for the hosting provider.
@@ -157,8 +159,8 @@ The intended sequence is:
 5. Convert the plan into large issues and finer tasks using the hosting provider's features.
 6. Start a new agent instance for a large subtask, define its concrete goals, acceptance criteria, and verification method, and create a descriptively named feature branch for the feature addition or extension. Goals may cover exploration or best effort optimization. For optimization work, agree with the user on the target, approach, and stopping conditions; the user shapes the methods unless they explicitly delegate those choices.
 7. Follow the plan and document attempts as work proceeds. Preserve successful approaches for reuse in future projects and unsuccessful approaches to prevent repeated failures.
-8. Fix bugs introduced within the current subtask in place, without creating separate issues.
-9. For bugs in finished tasks, pause and search the existing issues. Add context to a matching issue, or ask the user to create an issue and delegate a fixing worker when no match exists. The user orchestrates simultaneous discoveries and assigns a single fixing worker. The fix requires verification of the affected areas, Ponytail review, the code explanation, and explicit user approval before merging into `develop`. Bring the corrected `develop` into the feature branch before resuming. Other tasks blocked by the same bug must also be marked blocked and their agents paused.
+8. Fix bugs in work that has not yet reached `develop` in the working branch, without creating separate bug issues or asking for a separate fixing worker.
+9. For bugs already present in `develop`, pause and search the existing issues. Add context to a matching issue, or ask the user to create an issue and delegate a fixing worker when no match exists. The user orchestrates simultaneous discoveries and assigns a single fixing worker. The fix requires verification of the affected areas, Ponytail review, the code explanation, and explicit user approval before merging into `develop`. Bring the corrected `develop` into the feature branch before resuming. Other tasks blocked by the same bug must also be marked blocked and their agents paused.
 10. Escalate problems that invalidate the plan to the user for orchestration and replanning.
 11. Verify the affected areas against the instance's agreed acceptance criteria and obtain an extensive Ponytail code review. Explain every changed or added line of code compared with `develop`, carry out any revisions requested by the user, and obtain explicit user approval before merging the branch into `develop`.
 12. Preserve a working `develop` branch and use `main` exclusively for publication.
@@ -234,15 +236,11 @@ What events require a remote backup? How should agents handle network outages, a
 
 ### How do large subtasks map to branches and agents
 
-Is each large subtask exactly one feature branch, or can a feature contain several large subtasks? What marks a task as finished for the bug-handling rule?
+Is each large subtask exactly one feature branch, or can a feature contain several large subtasks?
 
 ### How are other affected agents informed and paused
 
 Under human orchestration, should the user notify and pause other affected agents, or should agents also check the issue tracker at agreed checkpoints? Which tasks should pause when the impact of a bug is not yet known?
-
-### Does human bug orchestration also apply within the current subtask
-
-The earlier rule lets an agent fix bugs it introduced within its current subtask in place, without creating a new issue. Does that exception remain, with human issue creation and worker delegation applying to bugs in `develop` or previously finished tasks, or should the new workflow also apply to bugs introduced within the current subtask?
 
 ### How are review findings handled
 
