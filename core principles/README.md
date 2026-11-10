@@ -126,7 +126,9 @@ An example is discovering that the result of a previously finished task can neve
 
 Every attempt must be documented with enough detail to explain what was tried and what happened.
 
-When a difficult situation requires previous knowledge or exploration, successful approaches must be preserved so that engineers and agents can find and reuse them in future projects. This knowledge must remain discoverable beyond the current agent instance and task.
+When a difficult situation requires previous knowledge or exploration, successful approaches must be preserved so that the engineer and their agents can find and reuse them in future projects. This knowledge must remain discoverable beyond the current agent instance and task.
+
+Reusable knowledge is maintained individually for each engineer. Their successful and unsuccessful approaches must be discoverable and reusable across that engineer's projects.
 
 Unsuccessful attempts must also be documented. Once an approach has been proven to fail, the documentation must prevent the same approach from being tried again on the same software basis. Recording only that an attempt failed is insufficient if another agent cannot recognize and avoid repeating it.
 
@@ -208,9 +210,9 @@ How should agents identify the affected rows, features, and modules? Within that
 
 If the agreed stopping conditions are reached and exploration produces useful knowledge but no implementation improvement, what deliverable closes the task, and is human sign-off required?
 
-### How is reusable knowledge shared across projects
+### How is per engineer knowledge discovered across projects
 
-Where should successful and unsuccessful approaches be kept so that a new agent instance working on another project can find them? How should project records link to this shared knowledge while keeping each project's source of truth authoritative?
+Where should an engineer's successful and unsuccessful approaches be kept so that a new agent instance working on another of their projects can find them? How should project records link to that engineer's reusable knowledge while keeping each project's source of truth authoritative?
 
 ### How are documentation and issue records divided
 
