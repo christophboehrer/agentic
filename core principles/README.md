@@ -30,6 +30,14 @@ Roadmap changes and planning may be performed directly on `develop`, including a
 
 Every feature addition or extension requires a new branch with a descriptive name. `develop` must represent a working state, rather than merely the most recent changes.
 
+### Squash merges keep develop history concise
+
+Approved feature and bugfix branches must be squash merged into `develop`. Each approved branch contributes one commit to `develop`, combining its implementation commits into a single completed change.
+
+Agents must continue to commit and push meaningful steps on their working branches. The affected-area testing, Ponytail review, code explanation, and explicit user approval requirements still apply before the squash merge.
+
+Successful and unsuccessful attempts must remain documented independently of the condensed commit history. Planning changes made directly on `develop` remain individual commits.
+
 ### Documentation is essential
 
 Every project must have an exhaustive description of its purpose and exactly one source of truth document.
@@ -124,7 +132,7 @@ If an agent discovers a bug already present in `develop`, it must:
 4. If no matching issue exists, ask the user to create an issue and delegate a worker to fix it. Issue creation and worker delegation are performed by the user under this workflow.
 5. Let the user orchestrate the fixing effort. If multiple agents discover the same bug at the same time, the user resolves the overlap and delegates a single fixing worker.
 6. Have the fixing worker present the required explanation of the fix and obtain explicit user approval for the merge.
-7. Merge the approved fix into `develop`.
+7. Squash merge the approved fix into `develop`.
 8. Merge the updated `develop` into the paused feature branch.
 9. Continue the original subtask.
 
@@ -162,9 +170,9 @@ The intended sequence is:
 6. Start a new agent instance for a large subtask, define its concrete goals, acceptance criteria, and verification method, and create a descriptively named feature branch for the feature addition or extension. Goals may cover exploration or best effort optimization. For optimization work, agree with the user on the target, approach, and stopping conditions; the user shapes the methods unless they explicitly delegate those choices.
 7. Follow the plan and document attempts as work proceeds. Preserve successful approaches for reuse in future projects and unsuccessful approaches to prevent repeated failures.
 8. Fix bugs in work that has not yet reached `develop` in the working branch, without creating separate bug issues or asking for a separate fixing worker.
-9. For bugs already present in `develop`, pause and search the existing issues. Add context to a matching issue, or ask the user to create an issue and delegate a fixing worker when no match exists. The user orchestrates simultaneous discoveries and assigns a single fixing worker. The fix requires verification of the affected areas, Ponytail review, the code explanation, and explicit user approval before merging into `develop`. Bring the corrected `develop` into the feature branch before resuming. Other tasks blocked by the same bug must also be marked blocked and their agents paused.
+9. For bugs already present in `develop`, pause and search the existing issues. Add context to a matching issue, or ask the user to create an issue and delegate a fixing worker when no match exists. The user orchestrates simultaneous discoveries and assigns a single fixing worker. The fix requires verification of the affected areas, Ponytail review, the code explanation, and explicit user approval before squash merging into `develop`. Bring the corrected `develop` into the feature branch before resuming. Other tasks blocked by the same bug must also be marked blocked and their agents paused.
 10. Escalate problems that invalidate the plan to the user for orchestration and replanning.
-11. Verify the affected areas against the instance's agreed acceptance criteria and obtain an extensive Ponytail code review. Explain every changed or added line of code compared with `develop`, carry out any revisions requested by the user, and obtain explicit user approval before merging the branch into `develop`.
+11. Verify the affected areas against the instance's agreed acceptance criteria and obtain an extensive Ponytail code review. Explain every changed or added line of code compared with `develop`, carry out any revisions requested by the user, and obtain explicit user approval before squash merging the branch into `develop`.
 12. Preserve a working `develop` branch and use `main` exclusively for publication.
 
 The handling of exploratory outcomes without implementation improvements, review findings, explanations of deleted code, source of truth updates, and release process are not yet fully defined.
@@ -232,9 +240,9 @@ Where should an engineer's successful and unsuccessful approaches be kept so tha
 
 Which information is authoritative in the source of truth, and which information is authoritative in the hosting provider's issues? Where should detailed attempt records live so they can be found without creating competing versions of project state?
 
-### How is develop history kept concise
+### How are planning commits and completed branches managed
 
-Which merge strategy should keep `develop` history concise while allowing frequent commits and pushes on working branches? How should direct planning updates on `develop` be grouped, and how long should the detailed history on completed working branches be retained?
+How should direct planning updates on `develop` be grouped, and how long should the detailed history on completed working branches be retained after a squash merge?
 
 ### How are backup failures and exceptions handled
 
