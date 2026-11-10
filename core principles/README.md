@@ -62,7 +62,13 @@ A task may explore options or attempt an optimization without a predefined techn
 
 When its agent instance starts, the concrete goal may be to investigate options, compare approaches, or make a best effort to improve the current result and document the findings. The goal must reflect the exploratory nature of the work rather than require an outcome that is not yet known to be achievable.
 
-How exploratory tasks are bounded and when they count as complete remain open questions.
+### The user shapes optimization targets and methods
+
+Before pursuing an optimization, the agent must discuss and agree with the user on the target, the approach, and when the optimization can stop. The target may be exploratory or best effort; it need not promise a fixed numerical improvement.
+
+The user must shape how the optimization is achieved unless they explicitly delegate those choices to the agent. The agent must follow the agreed direction. Agreement on an approach authorizes its routine steps; material changes to that direction must be discussed with the user unless covered by explicit delegation.
+
+The agreed target, approach, stopping conditions, and any delegation must be documented.
 
 ### Verification covers the affected areas
 
@@ -126,7 +132,7 @@ The intended sequence is:
 3. Define the project scope and create the source of truth on `develop`.
 4. Agree on the core features, roadmap, implementation decisions, development plan, and input/output contracts.
 5. Convert the plan into large issues and finer tasks using the hosting provider's features.
-6. Start a new agent instance for a large subtask, define its concrete goals, acceptance criteria, and verification method, and create a descriptively named feature branch for the feature addition or extension. Goals may cover exploration or best effort optimization.
+6. Start a new agent instance for a large subtask, define its concrete goals, acceptance criteria, and verification method, and create a descriptively named feature branch for the feature addition or extension. Goals may cover exploration or best effort optimization. For optimization work, agree with the user on the target, approach, and stopping conditions; the user shapes the methods unless they explicitly delegate those choices.
 7. Follow the plan and document attempts as work proceeds. Preserve successful approaches for reuse in future projects and unsuccessful approaches to prevent repeated failures.
 8. Fix bugs introduced within the current subtask in place, without creating separate issues.
 9. For bugs in finished tasks, pause, raise a bugfix issue, have a subagent fix it, verify the affected areas, obtain the required Ponytail review, merge into `develop`, bring `develop` into the feature branch, and resume.
@@ -134,7 +140,7 @@ The intended sequence is:
 11. Verify the affected areas against the instance's agreed acceptance criteria and obtain an extensive Ponytail code review before merging the branch into `develop`.
 12. Preserve a working `develop` branch and use `main` exclusively for publication.
 
-The stopping criteria for exploratory work, handling of review findings, merge approval, source of truth updates, and release process are not yet fully defined.
+The handling of exploratory outcomes without implementation improvements, review findings, merge approval, source of truth updates, and release process are not yet fully defined.
 
 ## Proposed additions for discussion
 
@@ -187,9 +193,9 @@ Roadmap changes and planning may be performed directly on `develop`. Should othe
 
 How should agents identify the affected rows, features, and modules? Within that scope, when are hardware execution, numerical accuracy, performance measurements, or environment reproduction required? Who agrees on the task's acceptance criteria and verification method when its agent instance starts?
 
-### When should exploratory work stop
+### How is exploration without implementation improvement concluded
 
-For exploration and best effort optimization, what limits the work and establishes completion when no fixed technical outcome is promised? How should the outcome be handled if the exploration produces useful knowledge but no implementation improvement?
+If the agreed stopping conditions are reached and exploration produces useful knowledge but no implementation improvement, what deliverable closes the task, and is human sign-off required?
 
 ### How is reusable knowledge shared across projects
 
