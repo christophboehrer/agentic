@@ -50,11 +50,33 @@ Open tasks and work in progress must be tracked through GitHub Issues or equival
 
 The project begins by using `develop` to define its full scope and create the source of truth document.
 
-Once the scope and development plan are established, the work must be broken into large subtasks. Each large subtask must then be broken into finer tasks using the hosting provider's task hierarchy or equivalent features.
+The core features must be decided during project planning. Once the scope and development plan are established, the work must be broken into large subtasks. Each large subtask must then be broken into finer tasks using the hosting provider's task hierarchy or equivalent features.
 
 The purpose and input/output contracts of the planned work must be well defined before implementation begins.
 
-Each large subtask must be assigned to a new agent instance. That instance must follow the agreed plan.
+Each large subtask must be assigned to a new agent instance. The concrete goals, acceptance criteria, and relevant verification method for that instance must be defined when it starts. The instance must follow the agreed plan.
+
+### Exploration and best effort optimization are valid tasks
+
+A task may explore options or attempt an optimization without a predefined technical outcome or numerical improvement target.
+
+When its agent instance starts, the concrete goal may be to investigate options, compare approaches, or make a best effort to improve the current result and document the findings. The goal must reflect the exploratory nature of the work rather than require an outcome that is not yet known to be achievable.
+
+How exploratory tasks are bounded and when they count as complete remain open questions.
+
+### Verification covers the affected areas
+
+Before declaring a task finished and merging its implementation into `develop`, the agent must provide evidence that the acceptance criteria agreed for that instance are satisfied.
+
+Only affected rows, features, and modules must be tested. Testing the full functionality of the project on every change is not required. Verification of existing functionality is limited to the areas affected by the change.
+
+The agent must document which affected areas were tested and the results. The checks appropriate to each task must reflect its goals, including whether it is implementation, exploration, or best effort optimization.
+
+### Ponytail review is required before merging
+
+Before any branch may be merged into `develop`, its changes must receive an extensive code review using the Ponytail plugin. This requirement applies to feature branches and bugfix branches.
+
+How review findings are resolved and who authorizes the merge remain open questions.
 
 ### Bug handling depends on where the bug originated
 
@@ -75,7 +97,7 @@ If an agent discovers a bug in a previously finished task, it must:
 5. Merge the updated `develop` into the paused feature branch.
 6. Continue the original subtask.
 
-This recovery must preserve the requirement that `develop` contains a working state. The checks that establish this state and the authority to approve merges still need to be defined.
+The bugfix must meet the verification requirements for its affected areas and receive the required Ponytail review before merging. The authority to approve merges still needs to be defined.
 
 #### A problem that invalidates the plan
 
@@ -83,13 +105,17 @@ If a major issue arises, the agent must pause and report it to the user. The use
 
 An example is discovering that the result of a previously finished task can never satisfy the needs of a downstream task. The agent must not treat such a problem as an ordinary local bugfix and independently continue with a changed project plan.
 
-### Attempts and failed approaches must be documented
+### Successful and unsuccessful attempts must be documented
 
 Every attempt must be documented with enough detail to explain what was tried and what happened.
 
-Once an approach has been proven to fail, the documentation must prevent the same approach from being tried again. Recording only that an attempt failed is insufficient if another agent cannot recognize and avoid repeating it.
+When a difficult situation requires previous knowledge or exploration, successful approaches must be preserved so that engineers and agents can find and reuse them in future projects. This knowledge must remain discoverable beyond the current agent instance and task.
 
-The location of these records, the evidence required to establish failure, and what counts as the same approach still need to be agreed.
+Unsuccessful attempts must also be documented. Once an approach has been proven to fail, the documentation must prevent the same approach from being tried again on the same software basis. Recording only that an attempt failed is insufficient if another agent cannot recognize and avoid repeating it.
+
+An update or a changed version of the software basis is an exception: the previously unsuccessful approach may be tried again under the changed software basis. The earlier attempt and its outcome must remain documented.
+
+The location and discovery of these records, the evidence required to establish failure, and how approaches and software versions are identified still need to be agreed.
 
 ## Development scenario
 
@@ -98,16 +124,17 @@ The intended sequence is:
 1. Establish a remotely hosted Git repository, or identify the existing repository and its remote.
 2. During initial setup, establish the project branches.
 3. Define the project scope and create the source of truth on `develop`.
-4. Agree on the roadmap, implementation decisions, development plan, and input/output contracts.
+4. Agree on the core features, roadmap, implementation decisions, development plan, and input/output contracts.
 5. Convert the plan into large issues and finer tasks using the hosting provider's features.
-6. Start a new agent instance for a large subtask and create a descriptively named feature branch for the feature addition or extension.
-7. Follow the plan and document attempts as work proceeds.
+6. Start a new agent instance for a large subtask, define its concrete goals, acceptance criteria, and verification method, and create a descriptively named feature branch for the feature addition or extension. Goals may cover exploration or best effort optimization.
+7. Follow the plan and document attempts as work proceeds. Preserve successful approaches for reuse in future projects and unsuccessful approaches to prevent repeated failures.
 8. Fix bugs introduced within the current subtask in place, without creating separate issues.
-9. For bugs in finished tasks, pause, raise a bugfix issue, have a subagent fix it, merge into `develop`, bring `develop` into the feature branch, and resume.
+9. For bugs in finished tasks, pause, raise a bugfix issue, have a subagent fix it, verify the affected areas, obtain the required Ponytail review, merge into `develop`, bring `develop` into the feature branch, and resume.
 10. Escalate problems that invalidate the plan to the user for orchestration and replanning.
-11. Complete the work while preserving a working `develop` branch and using `main` exclusively for publication.
+11. Verify the affected areas against the instance's agreed acceptance criteria and obtain an extensive Ponytail code review before merging the branch into `develop`.
+12. Preserve a working `develop` branch and use `main` exclusively for publication.
 
-The completion criteria, merge process, source of truth updates, and release process are not yet defined.
+The stopping criteria for exploratory work, handling of review findings, merge approval, source of truth updates, and release process are not yet fully defined.
 
 ## Proposed additions for discussion
 
@@ -145,7 +172,7 @@ A large subtask could provide its new agent instance with:
 - Its purpose, scope, acceptance criteria, and input/output contracts.
 - Links to the source of truth and the relevant issue hierarchy.
 - Its dependencies and the work already completed.
-- Known failed approaches relevant to the subtask.
+- Known successful and unsuccessful approaches relevant to the subtask, including their software versions and applicability to the current work.
 - The current repository and branch state.
 
 These are proposed requirements for task context, not a prescribed skill or file structure.
@@ -156,9 +183,17 @@ These are proposed requirements for task context, not a prescribed skill or file
 
 Roadmap changes and planning may be performed directly on `develop`. Should other documentation updates, such as changelog entries and descriptions of completed implementation work, also be made directly on `develop`, or should they accompany the relevant feature or bugfix branch?
 
-### What establishes that develop is working
+### How are verification requirements selected
 
-Which checks are mandatory before a merge? For SiMa work, when are hardware execution, numerical accuracy, performance measurements, or environment reproduction required? Can a project be working while planned features remain unimplemented, provided its accepted current behavior passes the required checks?
+How should agents identify the affected rows, features, and modules? Within that scope, when are hardware execution, numerical accuracy, performance measurements, or environment reproduction required? Who agrees on the task's acceptance criteria and verification method when its agent instance starts?
+
+### When should exploratory work stop
+
+For exploration and best effort optimization, what limits the work and establishes completion when no fixed technical outcome is promised? How should the outcome be handled if the exploration produces useful knowledge but no implementation improvement?
+
+### How is reusable knowledge shared across projects
+
+Where should successful and unsuccessful approaches be kept so that a new agent instance working on another project can find them? How should project records link to this shared knowledge while keeping each project's source of truth authoritative?
 
 ### How are documentation and issue records divided
 
@@ -174,11 +209,11 @@ Is each large subtask exactly one feature branch, or can a feature contain sever
 
 ### Who approves fixes and merges
 
-May an agent merge a verified feature or bugfix into `develop` autonomously, or is human approval required? What happens when the agent discovers that a bugfix changes a contract, conflicts with other work, or requires replanning?
+After the required Ponytail review, which findings must be resolved before a merge, and may an agent merge a verified feature or bugfix into `develop` autonomously, or is human approval required? What happens when the agent discovers that a bugfix changes a contract, conflicts with other work, or requires replanning?
 
 ### What counts as a repeated failed approach
 
-How should agents distinguish repeating a proven failure from a materially different attempt after a code change, corrected configuration, new SDK version, different hardware, or new evidence? Who may authorize reconsidering an approach?
+How should agents identify matching approaches and the software basis on which they were tried? How should an update or software version change that permits a retry be recorded so the retry can be distinguished from repeating an unchanged failed approach?
 
 ### What is the boundary of a development project
 
