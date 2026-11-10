@@ -50,13 +50,18 @@ Code and the documentation recording its decisions may arrive on `develop` toget
 
 Every project must have an exhaustive description of its purpose and exactly one source of truth document.
 
-The source of truth must contain:
+The source of truth must have a table of contents and stable sections covering:
 
-- The purpose and full scope of the project.
-- The features that must be supported.
-- The current implementation roadmap and development plan.
-- Implementation decisions.
-- A changelog.
+| Section | Contents |
+| --- | --- |
+| Purpose and scope | Why the project exists, its goals, boundaries, and exclusions. |
+| Features and interactions | Required behavior, clearly identifying what is implemented and what is planned. |
+| Architecture and contracts | Component responsibilities, inputs, outputs, and how components interact. |
+| Working environment | Relevant hardware, software versions, dependencies, and known limitations. |
+| Roadmap | The implementation direction and development plan, with links to the issue hierarchy. |
+| Implementation decisions | What was decided, why, and which components or interactions are affected. |
+| Verification | How behavior is verified, with links to recorded results. |
+| Changelog | A concise entry for each merged change, linked to its issue or pull request. |
 
 The document on `develop` is the sole authoritative current source of truth. Agents must consult that version regardless of their working branch.
 
@@ -64,7 +69,23 @@ Git may retain historical revisions, and other branches may contain inherited sn
 
 A feature or bugfix branch may prepare proposed documentation changes alongside its code. Those changes become authoritative when merged into `develop`; until then, the current document on `develop` remains authoritative.
 
-Open tasks and work in progress must be tracked through GitHub Issues or equivalent features of the selected hosting provider. The source of truth must remain consistent with the work tracked there.
+Open tasks and work in progress must be tracked through GitHub Issues or equivalent features of the selected hosting provider. Detailed task status belongs in the issue tracker. The source of truth contains the roadmap and links to the issues, and must remain consistent with the work tracked there.
+
+### Keep current documentation navigable
+
+When behavior changes, update the relevant section of the authoritative document so that each feature or contract has one current description.
+
+Implementation decisions must have stable identifiers. When a decision changes, mark the previous decision as superseded and preserve its rationale in a historical appendix within the same document.
+
+A short project entry point links to the authoritative document on `develop`. Concrete filenames and storage layouts will be chosen later.
+
+### Supporting records preserve evidence and reusable knowledge
+
+Detailed experiment records, test results, reproduction details, and attempt histories may be kept separately and linked from the authoritative document. Each attempt record must identify the source revision, software versions, approach, result, and conclusion.
+
+The project document defines the current project and contains the resulting decisions. Supporting records explain what was observed and why those decisions were made; they do not establish competing current requirements or behavior.
+
+Reusable techniques belong in the engineer's personal knowledge collection. Project-specific choices remain in the project's authoritative document.
 
 ### Planning precedes implementation
 
@@ -188,35 +209,24 @@ The intended sequence is:
 12. Ensure all decisions made during the branch's work, including implementation and intended interaction behavior, are documented in the authoritative source of truth on `develop`. Code and documentation may arrive together in the same squash merge. After the successful squash merge and once this record is in place, delete the merged working branch.
 13. Preserve a working `develop` branch and use `main` exclusively for publication.
 
-The handling of exploratory outcomes without implementation improvements, review findings, explanations of deleted code, source of truth updates, and release process are not yet fully defined.
+The handling of exploratory outcomes without implementation improvements, review findings, explanations of deleted code, documentation filenames and storage locations, and release process are not yet fully defined.
 
 ## Proposed additions for discussion
 
-### Additional source of truth content
+### Additional detail for decision records
 
-The following would help an engineer or a fresh agent understand the project without reconstructing its history:
-
-- Goals, success criteria, exclusions, and project constraints.
-- Architecture, component responsibilities, and the boundaries between them.
-- Input/output contracts, including data formats, units, shapes, types, and failure behavior where relevant.
-- The supported SiMa hardware, SDK and tool versions, and relevant environment requirements.
-- Verification and acceptance criteria, with links to the evidence supporting the current working state.
-- Decision rationale, including alternatives rejected and the reasons for rejecting them.
-- Known limitations, unresolved questions, and dependencies on other work.
-- Links to issues, task dependencies, and the records of attempts.
-
-The boundaries between this document, issue records, and supporting evidence need to be agreed before these additions become requirements.
+Decision records could also include rejected alternatives, the reasons for rejecting them, and links to supporting evidence and relevant issues.
 
 ### Information needed to understand an attempt
 
-A useful attempt record could include:
+Beyond the required source revision, software versions, approach, result, and conclusion, an attempt record could also include:
 
 - The task, intended outcome, and hypothesis being tested.
-- The approach and the reason for choosing it.
-- The relevant source revision, environment, tool versions, configuration, and inputs.
+- The reason for choosing the approach.
+- Further environment details, tool versions, configuration, and inputs.
 - The actions or commands needed to reproduce the attempt.
-- The observed result and links to logs, tests, or other evidence.
-- The conclusion, including whether the approach was proven to fail or remains inconclusive.
+- Links to logs, tests, or other evidence supporting the observed result.
+- An explicit distinction between proven failure and inconclusive results.
 - Enough identifying context for another agent to recognize the approach and avoid repeating a proven failure.
 
 ### Information needed for a fresh agent instance
@@ -233,10 +243,6 @@ These are proposed requirements for task context, not a prescribed skill or file
 
 ## Open questions
 
-### How is the authoritative project document structured
-
-How should the single source of truth remain exhaustive and easy to navigate as the project grows? Which supporting records may be kept separately, and how should the document link to them without duplicating current project requirements, behavior, or decisions?
-
 ### How are verification requirements selected
 
 How should agents identify the affected rows, features, and modules? Within that scope, when are hardware execution, numerical accuracy, performance measurements, or environment reproduction required? Who agrees on the task's acceptance criteria and verification method when its agent instance starts?
@@ -248,10 +254,6 @@ If the agreed stopping conditions are reached and exploration produces useful kn
 ### How is per engineer knowledge discovered across projects
 
 Where should an engineer's successful and unsuccessful approaches be kept so that a new agent instance working on another of their projects can find them? How should project records link to that engineer's reusable knowledge while keeping each project's source of truth authoritative?
-
-### How are documentation and issue records divided
-
-Which information is authoritative in the source of truth, and which information is authoritative in the hosting provider's issues? Where should detailed attempt records live so they can be found without creating competing versions of project state?
 
 ### How are direct planning commits grouped
 
