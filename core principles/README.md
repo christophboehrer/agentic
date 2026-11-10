@@ -147,6 +147,12 @@ The user must shape how the optimization is achieved unless they explicitly dele
 
 The agreed target, approach, stopping conditions, and any delegation must be documented.
 
+### The user decides when to conclude exploration
+
+When exploration or best effort optimization reaches an agreed stopping point, the agent must pause that work and report its attempts and findings, including when no improvement was achieved.
+
+The user decides whether to continue, conclude the task, or move on to other work. Closing the task or its issue and moving on follow the user's decision.
+
 ### Verification covers the affected areas
 
 Before declaring a task finished and merging its implementation into `develop`, the agent must provide evidence that the acceptance criteria agreed for that instance are satisfied.
@@ -233,7 +239,7 @@ The intended sequence for a project started under these principles is:
 4. Agree on the core features, roadmap, implementation decisions, development plan, and input/output contracts.
 5. Convert the plan into large issues and finer tasks using the hosting provider's features.
 6. Create a descriptively named branch for the complete feature addition or extension. Use a new agent instance for each large subtask and define its concrete goals, acceptance criteria, and verification method when it starts. Goals may cover exploration or best effort optimization. For optimization work, agree with the user on the target, approach, and stopping conditions; the user shapes the methods unless they explicitly delegate those choices.
-7. Follow the plan and document attempts as work proceeds. Agents may merge subtask work into the feature branch without asking for user approval. Preserve successful approaches for reuse in future projects and unsuccessful approaches to prevent repeated failures.
+7. Follow the plan and document attempts as work proceeds. Agents may merge subtask work into the feature branch without asking for user approval. Preserve successful approaches for reuse in future projects and unsuccessful approaches to prevent repeated failures. For exploration and best effort optimization, report the findings at the agreed stopping point and let the user decide whether to continue, conclude, or move on.
 8. Fix bugs in work that has not yet reached `develop` in the working branch, without creating separate bug issues or asking for a separate fixing worker.
 9. For bugs already present in `develop`, pause and search the existing issues. Add context to a matching issue, or ask the user to create an issue and delegate a fixing worker when no match exists. The user orchestrates simultaneous discoveries and assigns a single fixing worker. The fix requires verification of the affected areas, Ponytail review, the code explanation, and explicit user approval before squash merging into `develop`. Bring the corrected `develop` into the feature branch before resuming. Other tasks blocked by the same bug must also be marked blocked and their agents paused.
 10. Escalate problems that invalidate the plan to the user for orchestration and replanning.
@@ -241,7 +247,7 @@ The intended sequence for a project started under these principles is:
 12. Ensure all decisions made during the branch's work, including implementation and intended interaction behavior, are documented in the authoritative source of truth on `develop`. Code and documentation may arrive together in the same squash merge. After the successful squash merge and once this record is in place, delete the merged working branch.
 13. Preserve a working `develop` branch. Publish it to `main` only for a release explicitly requested or manually triggered by the user, assigning a release version number and Git tag to the released commit on `main`.
 
-The handling of exploratory outcomes without implementation improvements, explanations of deleted code, documentation filenames and storage locations, and detailed release procedure are not yet fully defined.
+Explanations of deleted code, documentation filenames and storage locations, and the detailed release procedure are not yet fully defined.
 
 ## Proposed additions for discussion
 
@@ -282,10 +288,6 @@ How should release version numbers be chosen? What documentation and deliverable
 ### How are verification requirements selected
 
 How should agents identify the affected rows, features, and modules? Within that scope, when are hardware execution, numerical accuracy, performance measurements, or environment reproduction required? Who agrees on the task's acceptance criteria and verification method when its agent instance starts?
-
-### How is exploration without implementation improvement concluded
-
-If the agreed stopping conditions are reached and exploration produces useful knowledge but no implementation improvement, what deliverable closes the task, and is human sign-off required?
 
 ### How is per engineer knowledge discovered across projects
 
