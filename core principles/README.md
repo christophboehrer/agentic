@@ -139,7 +139,11 @@ The agent must document which affected areas were tested and the results. The ch
 
 Before any branch may be merged into `develop`, its changes must receive an extensive code review using the Ponytail plugin. This requirement applies to feature branches and bugfix branches.
 
-How review findings are resolved remains an open question. The user must approve the merge as described below.
+The agent must fix review problems that can be resolved within the approved plan before presenting the complete feature or bugfix to the user. The version presented for approval must satisfy the affected-area verification and Ponytail review requirements.
+
+Problems that require a change to the approved plan must be discussed with the user. Bugs already present in `develop` follow the bug-handling workflow below.
+
+The user must approve the merge as described below.
 
 ### The user approves merges after a full code explanation
 
@@ -213,11 +217,11 @@ The intended sequence is:
 8. Fix bugs in work that has not yet reached `develop` in the working branch, without creating separate bug issues or asking for a separate fixing worker.
 9. For bugs already present in `develop`, pause and search the existing issues. Add context to a matching issue, or ask the user to create an issue and delegate a fixing worker when no match exists. The user orchestrates simultaneous discoveries and assigns a single fixing worker. The fix requires verification of the affected areas, Ponytail review, the code explanation, and explicit user approval before squash merging into `develop`. Bring the corrected `develop` into the feature branch before resuming. Other tasks blocked by the same bug must also be marked blocked and their agents paused.
 10. Escalate problems that invalidate the plan to the user for orchestration and replanning.
-11. Once all agreed subtasks are complete and integrated on the feature branch, verify the affected areas against the agreed acceptance criteria and obtain an extensive Ponytail code review of the complete feature. Explain every changed or added line of code compared with `develop`, carry out any revisions requested by the user, and obtain explicit user approval before squash merging the complete feature into `develop` in one merge.
+11. Once all agreed subtasks are complete and integrated on the feature branch, verify the affected areas against the agreed acceptance criteria and obtain an extensive Ponytail code review of the complete feature. Fix review problems within the approved plan before presenting the result to the user, keeping verification and review applicable to the final version. Explain every changed or added line of code compared with `develop`, carry out any revisions requested by the user, and obtain explicit user approval before squash merging the complete feature into `develop` in one merge.
 12. Ensure all decisions made during the branch's work, including implementation and intended interaction behavior, are documented in the authoritative source of truth on `develop`. Code and documentation may arrive together in the same squash merge. After the successful squash merge and once this record is in place, delete the merged working branch.
 13. Preserve a working `develop` branch and use `main` exclusively for publication.
 
-The handling of exploratory outcomes without implementation improvements, review findings, explanations of deleted code, documentation filenames and storage locations, and release process are not yet fully defined.
+The handling of exploratory outcomes without implementation improvements, explanations of deleted code, documentation filenames and storage locations, and release process are not yet fully defined.
 
 ## Proposed additions for discussion
 
@@ -278,10 +282,6 @@ How should agents combine independent subtask contributions on the feature branc
 ### How are other affected agents informed and paused
 
 Under human orchestration, should the user notify and pause other affected agents, or should agents also check the issue tracker at agreed checkpoints? Which tasks should pause when the impact of a bug is not yet known?
-
-### How are review findings handled
-
-Which Ponytail findings must be resolved before requesting user approval, and how should unresolved findings be presented to the user? What happens when the agent discovers that a bugfix changes a contract, conflicts with other work, or requires replanning?
 
 ### How should deleted code be explained
 
