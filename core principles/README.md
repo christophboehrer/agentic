@@ -19,14 +19,14 @@ If the user explicitly requests an exception, the agent must follow up to confir
 | Branch | Purpose |
 | --- | --- |
 | `main` | Publish the project and share it with others. |
-| `develop` | Hold the latest working state of the project. |
+| `develop` | Hold the latest working state of the project and its authoritative plan. |
 | Feature branch | Implement a specific feature addition or extension. |
 
-Development work must never take place directly on `main` or `develop`. The only stated exception is the setup of a new repository.
+Implementation work must never take place directly on `main` or `develop`. The only stated exception for implementation work is the setup of a new repository.
+
+Roadmap changes and planning may be performed directly on `develop`, including after initial repository setup.
 
 Every feature addition or extension requires a new branch with a descriptive name. `develop` must represent a working state, rather than merely the most recent changes.
-
-The planning scenario below also requires initial project definition on `develop`. How documentation changes interact with the direct-development restriction remains an explicit open question.
 
 ### Documentation is essential
 
@@ -152,9 +152,9 @@ These are proposed requirements for task context, not a prescribed skill or file
 
 ## Open questions
 
-### Can planning and documentation be changed directly on develop
+### How are other documentation updates handled
 
-Does the prohibition on direct development apply to implementation only, allowing planning and source of truth updates directly on `develop`? Or must documentation changes also use separate branches after repository setup?
+Roadmap changes and planning may be performed directly on `develop`. Should other documentation updates, such as changelog entries and descriptions of completed implementation work, also be made directly on `develop`, or should they accompany the relevant feature or bugfix branch?
 
 ### What establishes that develop is working
 
