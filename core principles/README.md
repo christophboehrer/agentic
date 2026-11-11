@@ -1,16 +1,24 @@
 # Core principles
 
-Working draft for discussion. These principles are intended for SiMa engineers using Claude or Codex. They establish how development should be backed up, planned, documented, and coordinated. Agent skills and PC setup instructions will be designed later.
+Working draft for discussion. These principles are intended for SiMa engineers using Claude or Codex. They establish how development should be backed up, planned, documented, and coordinated. PC setup instructions will be designed later.
 
 The stated principles below capture the requirements expressed so far. Proposed additions and unresolved questions are kept separate so that they do not silently become rules.
 
 ## Scope and repository selection
 
-These principles define the workflow for new projects started under this approach. They continue to govern those projects as development proceeds. They are not applied retroactively to pre-existing projects.
+Use the full workflow below for new projects started under this approach where the user controls the repository and its layout. It continues to apply as those projects develop.
 
-When working in an existing project managed by others, use its repository and follow the owners' established rules and procedures. The new-project rules below do not replace that project's branching, documentation, review, or release workflow.
+For an externally managed project, follow the owners' branching, documentation, review, and release procedures. Adapt the planning, backup, progress tracking, and verification practices to the project's workflow and permissions.
 
-Use the repository that already exists for the work. Related experiments, exploratory scripts, and one-off tests stay in that project's repository, subject to its workflow. Create a new project repository only when no repository exists for the work.
+Reuse the existing project repository for implementation and related work, including exploratory scripts and one-off tests. Create a new project repository only when no repository exists for the work.
+
+### Planning and tracking in externally managed repositories
+
+Use the project's existing tracking location when it meets the initiative's needs. If changing the repository layout would give the initiative a clearer home for its plan and implementation progress, propose the specific change and ask whether the user has authority to approve it and agrees to it.
+
+Use the agreed layout in the project repository when the user has authority and approves the change. If the initiative needs a tracking location and the user lacks authority to change the layout or prefers to keep it, use a separate, authorized Git repository. Keep the initiative's plan, decisions, implementation progress, and verification records there, with links to the relevant upstream issues, pull requests, and project documentation.
+
+The agreed tracking location is authoritative for the initiative's plan and decisions. The project repository and the maintainers' guidance govern project behavior and the contribution process.
 
 ## Stated principles
 
@@ -18,13 +26,31 @@ Use the repository that already exists for the work. Related experiments, explor
 
 All development work in projects governed by these principles must be backed by a Git repository hosted on a remote server. This applies to initial setup and subsequent development, including related experiments and exploratory work.
 
-Agents must commit and push their work after meaningful steps, including while implementation is still in progress. Remote backup must not wait until the task is complete or ready for review.
+Agents must commit and push meaningful checkpoints as work progresses, including during implementation and exploration. Back up meaningful findings from disposable experiments in the agreed tracking location, following the scratch rules below.
 
 The user must explicitly initiate any decision to work without remote backup. The agent must never ask whether the user wants to opt out or suggest opting out as a routine alternative.
 
 If the user explicitly requests an exception, the agent must follow up to confirm that the user is really sure they want to proceed without backing up their work. An initial opt-out request alone is insufficient.
 
-Dedicated backup-outage handling is outside the current scope.
+If a required backup step is unavailable, follow the [procedure for unavailable required steps](#unavailable-required-steps). Dedicated backup-outage handling is outside the current scope.
+
+### Repository contents and scratch work
+
+Track source code, tests, build and verification scripts, dependency manifests, shared configuration, and small test fixtures or expected outputs. Track exploratory scripts and tests when they capture a meaningful checkpoint or are needed to resume work or reproduce an important result.
+
+Retain generated evidence when it supports a decision, serves as a baseline, or would be expensive to reproduce. Keep large datasets, binaries, and raw logs or measurements worth retaining in approved storage and link to them from the relevant project or initiative record.
+
+Ignore disposable build outputs, caches, virtual environments, temporary logs, and machine-specific configuration. Keep credentials in approved secret storage. Track a sample configuration when others need to see the required settings.
+
+Use `.gitignore` for shared exclusions and Git's local exclude file for personal exclusions. In externally managed repositories, follow the owners' process for changes to shared ignore rules.
+
+#### Disposable experiments in `do_not_track/`
+
+A project can reserve `do_not_track/` for quick probes, temporary test scripts, and throwaway outputs. Use `/do_not_track/` in the root `.gitignore` for a shared convention or in Git's local exclude file for personal scratch space.
+
+Before discarding scratch work, record each meaningful attempt outside `do_not_track/` in the agreed tracking location. Describe what was tried, what happened, and how the result should guide the next approach. Preserve reusable lessons in the engineer's personal knowledge collection.
+
+Scratch scripts and outputs can stay ignored and be discarded once the findings and any necessary evidence have been preserved. Move scripts or tests needed to resume meaningful work or reproduce an important result into a tracked location while work is in progress.
 
 ### Branches have distinct purposes
 
@@ -78,11 +104,11 @@ Code and the documentation recording its decisions may arrive on `develop` toget
 
 When the user abandons a feature, exploration, or optimization without merging its implementation, its findings and relevant decisions must be preserved before the working branch is deleted.
 
-Project-specific findings belong in the authoritative project document and linked evidence on `develop`. Reusable lessons belong in the engineer's personal knowledge collection. Once those records are preserved, delete the abandoned branch.
+Preserve project-specific findings and links to the supporting evidence in the agreed tracking location. For projects using the full workflow, this is the authoritative project document on `develop`. Preserve reusable lessons in the engineer's personal knowledge collection. Once the records are in place, delete the abandoned branch according to the project's workflow.
 
 ### Documentation is essential
 
-Every project governed by these principles must have an exhaustive description of its purpose and exactly one source of truth document.
+Every project using the full workflow must have an exhaustive description of its purpose and exactly one source-of-truth document. Externally managed projects follow the [planning and tracking rules for their repository](#planning-and-tracking-in-externally-managed-repositories).
 
 The source of truth must have a table of contents and stable sections covering:
 
@@ -111,17 +137,43 @@ When behavior changes, update the relevant section of the authoritative document
 
 Implementation decisions must have stable identifiers. When a decision changes, mark the previous decision as superseded and preserve its rationale in a historical appendix within the same document.
 
-A short project entry point links to the authoritative document on `develop`. Concrete filenames and storage layouts will be chosen later.
+### Give agents a repository overview at startup
+
+Every project governed by these principles must give agents a short overview through the root agent instructions. Put the overview in those instructions or link directly to a short entry point at the repository root. Summarize the project's purpose, core components, and where to find each one. Link to the authoritative project document on `develop`, the issue tracker, and the main build and verification guidance. Keep the overview current when the structure changes.
+
+Choose a layout that reflects the project's components and follows its tooling conventions. For externally managed projects, use the owners' layout and existing entry point. Fill navigation gaps in the agreed initiative record when repository changes lack approval.
+
+### Keep useful agent skills in the project
+
+Make useful skills available to agents working on the project. Reuse existing skills where they fit. When a repeatable task benefits from project-specific guidance, version the skill and its supporting files in the project repository and make it discoverable by the project's agent tools. Point to the relevant skills from the project overview.
+
+For externally managed projects, follow the owners' process for adding skills. When additions to the project repository lack approval, keep useful initiative-specific skills in an authorized Git repository for the initiative.
 
 ### Supporting records preserve evidence and reusable knowledge
 
-Detailed experiment records, test results, reproduction details, and attempt histories may be kept separately and linked from the authoritative document. Each attempt record must describe the approach, result, and conclusion.
+For projects using the full workflow, keep project decisions in the authoritative document on `develop` and track detailed task status in the issue tracker. For externally managed projects, keep the initiative's records in the agreed tracking location.
 
-Recording software versions, source revisions, artifact checksums, and similar technical identifiers is optional. This does not change the requirement for release version numbers and Git tags when publishing a release on `main`.
+For supporting evidence, recording software versions, source revisions, artifact checksums, and similar technical identifiers is optional. This does not change the requirement for release version numbers and Git tags when publishing a release on `main`.
 
-The project document defines the current project and contains the resulting decisions. Supporting records explain what was observed and why those decisions were made; they do not establish competing current requirements or behavior.
+Detailed experiment records, test results, reproduction details, and attempt histories may be kept separately and linked from the authoritative project document or initiative record. Supporting records explain what was observed and why decisions were made.
 
-Reusable techniques belong in the engineer's personal knowledge collection. Project-specific choices remain in the project's authoritative document.
+Reusable techniques belong in the engineer's personal knowledge collection.
+
+### Successful and unsuccessful attempts must be documented
+
+Document every meaningful attempt with enough detail to describe the approach, the result, and the conclusion.
+
+Failed approaches include wrong methods, concepts, and incorrect assumptions about or handling of APIs. Routine implementation mistakes do not count as failed approaches and do not require reusable failure records. Their correction follows the [bug-handling rules](#bug-handling-depends-on-whether-the-bug-is-in-develop).
+
+When a difficult situation requires previous knowledge or exploration, successful approaches must be preserved so that the engineer and their agents can find and reuse them in future projects. This knowledge must remain discoverable beyond the current agent instance and task.
+
+Reusable knowledge is maintained individually for each engineer. Their successful and unsuccessful approaches must be discoverable and reusable across that engineer's projects.
+
+Unsuccessful attempts must also be documented. Once an approach has been proven to fail, the documentation must prevent the same approach from being tried again on the same software basis. Recording only that an attempt failed is insufficient if another agent cannot recognize and avoid repeating it.
+
+An update or a changed version of the software basis is an exception: the previously unsuccessful approach may be tried again under the changed software basis. The earlier attempt and its outcome must remain documented.
+
+The storage and discovery of the engineer's personal knowledge collection still need to be agreed.
 
 ### Planning precedes implementation
 
@@ -132,6 +184,12 @@ The core features must be decided during project planning. Once the scope and de
 The purpose and input/output contracts of the planned work must be well defined before implementation begins.
 
 Each large subtask must be assigned to a new agent instance. The concrete goals, acceptance criteria, and relevant verification method for that instance must be defined when it starts. The instance must follow the agreed plan.
+
+### Maintain a handoff during implementation
+
+Create and keep a comprehensive handoff in the task's existing tracking location as implementation progresses. Update it at meaningful checkpoints so another agent can resume the work.
+
+Record the branch and last pushed commit, any local edits or unpushed commits, the checks completed and their results, current blockers, and the next action. Link to the approved task scope and any supporting evidence needed to continue.
 
 ### Parallel execution requires independent work
 
@@ -163,6 +221,10 @@ When exploration or best effort optimization reaches an agreed stopping point, t
 
 The user decides whether to continue, conclude the task, or move on to other work. Closing the task or its issue and moving on follow the user's decision.
 
+### Unavailable required steps
+
+If a required step is unavailable, report to the user which step is blocked and why. Wait for further instructions from the user.
+
 ### Verification covers the affected areas
 
 Before declaring a task finished and merging its implementation into `develop`, the agent must provide evidence that the acceptance criteria agreed for that instance are satisfied.
@@ -170,6 +232,12 @@ Before declaring a task finished and merging its implementation into `develop`, 
 Only affected rows, features, and modules must be tested. Testing the full functionality of the project on every change is not required. Verification of existing functionality is limited to the areas affected by the change.
 
 The agent must document which affected areas were tested and the results. The checks appropriate to each task must reflect its goals, including whether it is implementation, exploration, or best effort optimization.
+
+### Cleanup stays within the agreed scope
+
+Include cleanup made necessary by the implementation in the same change. For example, remove an import that becomes unused because of the fix.
+
+Make optional readability edits to existing code only when the user explicitly requests them. This also applies to code already being changed for the task.
 
 ### Ponytail review is required before merging
 
@@ -190,6 +258,10 @@ Before requesting approval, the agent must explain the implementation compared w
 Related lines may be explained together. An explanation may cover a whole block, method, or class, provided every changed or added line's purpose and reason for existing are covered. A separate explanation for each individual line is not required.
 
 The user has full authority to decide whether the implementation meets their standards. They may request changes or a complete overhaul. The agent must carry out the requested revisions and present the revised implementation for approval before merging. The revised implementation remains subject to the same verification and review requirements.
+
+### The user handles branch changes after review
+
+If the branch under review or its merge target changes after review, report the change to the user and pause the merge. The user handles the changed branch state and directs the next step. The existing verification, review, code explanation, and approval requirements apply to the version being merged.
 
 ### Bug handling depends on whether the bug is in develop
 
@@ -225,43 +297,27 @@ If a major issue arises, the agent must pause and report it to the user. The use
 
 An example is discovering that the result of a previously finished task can never satisfy the needs of a downstream task. The agent must not treat such a problem as an ordinary local bugfix and independently continue with a changed project plan.
 
-### Successful and unsuccessful attempts must be documented
-
-Every meaningful attempt at an approach must be documented with enough detail to explain what was tried and what happened.
-
-Failed approaches include wrong methods, concepts, and incorrect assumptions about or handling of APIs. Routine implementation mistakes do not count as failed approaches and do not require reusable failure records. Their correction still follows the bug-handling rules above.
-
-When a difficult situation requires previous knowledge or exploration, successful approaches must be preserved so that the engineer and their agents can find and reuse them in future projects. This knowledge must remain discoverable beyond the current agent instance and task.
-
-Reusable knowledge is maintained individually for each engineer. Their successful and unsuccessful approaches must be discoverable and reusable across that engineer's projects.
-
-Unsuccessful attempts must also be documented. Once an approach has been proven to fail, the documentation must prevent the same approach from being tried again on the same software basis. Recording only that an attempt failed is insufficient if another agent cannot recognize and avoid repeating it.
-
-An update or a changed version of the software basis is an exception: the previously unsuccessful approach may be tried again under the changed software basis. The earlier attempt and its outcome must remain documented.
-
-The location and discovery of these records still need to be agreed.
-
 ## Development scenario for new projects
 
 The intended sequence for a project started under these principles is:
 
 1. Establish remote backing for the project's Git repository, reusing the repository if one already exists. Create a new repository only when none exists for the work.
-2. During initial setup, establish the project branches.
-3. Define the project scope and create the source of truth on `develop`.
+2. During initial setup, establish the project branches and agree on shared exclusions using the [repository contents and scratch rules](#repository-contents-and-scratch-work).
+3. Define the project scope and create the source of truth on `develop`. Provide the [repository overview](#give-agents-a-repository-overview-at-startup) and make [useful project skills](#keep-useful-agent-skills-in-the-project) available.
 4. Agree on the core features, roadmap, implementation decisions, development plan, and input/output contracts.
 5. Convert the plan into large issues and finer tasks using the hosting provider's features.
 6. Create a descriptively named branch for the complete feature addition or extension. Use a new agent instance for each large subtask and define its concrete goals, acceptance criteria, and verification method when it starts. Goals may cover exploration or best effort optimization. For optimization work, agree with the user on the target, approach, and stopping conditions; the user shapes the methods unless they explicitly delegate those choices.
-7. Follow the plan and document meaningful attempts at approaches as work proceeds. Agents may merge subtask work into the feature branch without asking for user approval. Preserve successful approaches for reuse in future projects and unsuccessful approaches to prevent repeated failures. For exploration and best effort optimization, report the findings at the agreed stopping point and let the user decide whether to continue, conclude, or move on.
+7. Follow the plan, back up meaningful checkpoints, and record the findings of meaningful attempts as work proceeds, including before discarding scratch work. Keep the [implementation handoff](#maintain-a-handoff-during-implementation) current. Agents may merge subtask work into the feature branch without asking for user approval. Preserve successful approaches for reuse in future projects and unsuccessful approaches to prevent repeated failures. For exploration and best effort optimization, report the findings at the agreed stopping point and let the user decide whether to continue, conclude, or move on.
 8. Fix bugs in work that has not yet reached `develop` in the working branch, without creating separate bug issues or asking for a separate fixing worker.
 9. For bugs already present in `develop`, pause and search the existing issues. Add context to a matching issue, or ask the user to create an issue and delegate a fixing worker when no match exists. The user orchestrates simultaneous discoveries, assigns a single fixing worker, and informs other affected agents that they must pause. The fix requires verification of the affected areas, Ponytail review, the code explanation, and explicit user approval before squash merging into `develop`. The user merges the relevant corrected `develop` state into the affected feature branch before the agent resumes. Other tasks blocked by the same bug must also be marked blocked.
 10. Escalate problems that invalidate the plan to the user for orchestration and replanning.
-11. Once all agreed subtasks are complete and integrated on the feature branch, verify the affected areas against the agreed acceptance criteria and obtain an extensive Ponytail code review of the complete feature. Fix review problems within the approved plan before presenting the result to the user, keeping verification and review applicable to the final version. Explain every changed or added line of code compared with `develop`, carry out any revisions requested by the user, and obtain explicit user approval before squash merging the complete feature into `develop` in one merge.
+11. Once all agreed subtasks are complete and integrated on the feature branch, check that [cleanup stays within the agreed scope](#cleanup-stays-within-the-agreed-scope), verify the affected areas against the agreed acceptance criteria and obtain an extensive Ponytail code review of the complete feature. Fix review problems within the approved plan before presenting the result to the user, keeping verification and review applicable to the final version. Explain every changed or added line of code compared with `develop`, carry out any revisions requested by the user, and obtain explicit user approval before squash merging the complete feature into `develop` in one merge.
 12. Ensure all decisions made during the branch's work, including implementation and intended interaction behavior, are documented in the authoritative source of truth on `develop`. Code and documentation may arrive together in the same squash merge. After the successful squash merge and once this record is in place, delete the merged working branch.
 13. Preserve a working `develop` branch. Publish it to `main` only for a release explicitly requested or manually triggered by the user, assigning a release version number and Git tag to the released commit on `main`.
 
 If the user abandons the work instead of merging it, preserve the findings and relevant decisions, then delete the abandoned working branch.
 
-Explanations of deleted code, documentation filenames and storage locations, and the detailed release procedure are not yet fully defined.
+Explanations of deleted code and the detailed release procedure are not yet fully defined.
 
 ## Proposed additions for discussion
 
@@ -292,6 +348,13 @@ A large subtask could provide its new agent instance with:
 - The current repository and branch state.
 
 These are proposed requirements for task context, not a prescribed skill or file structure.
+
+### Git checks before commits, review, and handoff
+
+- Before a checkpoint commit, inspect `git status` and stage the files or hunks that belong to the checkpoint. Review the staged diff and use a commit message that explains what changed or what was learned.
+- Before review, read the full diff against the merge target, remove temporary diagnostics and obsolete files introduced during the task, and check that each remaining change belongs in the review.
+- At handoff, push any outstanding meaningful checkpoint and update the [implementation handoff](#maintain-a-handoff-during-implementation). Preserve edits already in progress by the user or another agent.
+- In a separate tracking repository, maintain one current record per task with links to the upstream issue, pull request, and supporting evidence.
 
 ## Open questions
 
