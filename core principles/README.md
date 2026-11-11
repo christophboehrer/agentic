@@ -1,6 +1,6 @@
 # Core principles
 
-Working draft for discussion. These principles are intended for SiMa engineers using Claude or Codex. They establish how development should be backed up, planned, documented, and coordinated. PC setup instructions will be designed later.
+Working draft for discussion. These principles are intended for SiMa engineers using Claude or Codex. They establish how development should be backed up, planned, documented, and coordinated. See the [local development station guide](../local%20dev%20station/README.md) for the workstation layout and setup.
 
 The stated principles below capture the requirements expressed so far. Proposed additions and unresolved questions are kept separate so that they do not silently become rules.
 
